@@ -24,4 +24,22 @@
    <list n="listOfChildren">
       <hash><url n="URL" path="tecajEura/tecajEura.jpr"/></hash>
    </list>
+   <hash n="oracle.jdeveloper.model.ApplicationLibraries">
+      <list n="libraryReferences">
+         <hash>
+            <url n="id" path="../../../Users/damir/AppData/Roaming/JDeveloper/system12.1.2.0.40.66.68/o.jdeveloper/JSOUP.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+      </list>
+   </hash>
+   <hash n="oracle.jdeveloper.model.PathsConfiguration">
+      <hash n="ApplicationSrcContentSet">
+         <list n="pattern-filters">
+            <string v="+**"/>
+         </list>
+         <list n="url-path">
+            <url path="src/"/>
+         </list>
+      </hash>
+   </hash>
 </jws:workspace>
