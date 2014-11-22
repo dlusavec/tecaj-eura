@@ -192,8 +192,8 @@ public class MainForm extends javax.swing.JFrame {
                 for (Element link : linkovi) {
                     puniLink = linkPrefiks + link.attr("href").substring(2, link.attr("href").length());                   
                     Tecaj tecaj = new Tecaj();
-                    tecaj.setMjesec(mjesec);
-                    tecaj.setDan(puniLink.substring(linkPrefiks.length() + 1, linkPrefiks.length() + 3));
+                    tecaj.setMjesec(Integer.parseInt(mjesec));
+                    tecaj.setDan(Integer.parseInt(puniLink.substring(linkPrefiks.length() + 1, linkPrefiks.length() + 3)));
                     tecaj.setLink(puniLink);
                     listaTecajeva.add(tecaj);
                     //System.out.println(puniLink);
@@ -233,11 +233,11 @@ public class MainForm extends javax.swing.JFrame {
             //System.out.println(m.group());
             tecajTmp = m.group();
             if (pozicija == 1) {
-                tecaj.setKupovni(tecajTmp);
+                tecaj.setKupovni(Pomocna.stringToBigDecimal(tecajTmp));
             } else if (pozicija == 2) {
-                tecaj.setSrednji(tecajTmp);
+                tecaj.setSrednji(Pomocna.stringToBigDecimal(tecajTmp));
             } else {
-                tecaj.setProdajni(tecajTmp);
+                tecaj.setProdajni(Pomocna.stringToBigDecimal(tecajTmp));
             }
             pozicija++;
         }

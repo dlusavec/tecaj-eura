@@ -53,6 +53,28 @@
       <value n="internalEncoding" v="Cp1250"/>
       <value n="webIANAEncoding" v="windows-1250"/>
    </hash>
+   <hash n="oracle.jdevimpl.config.JProjectLibraries">
+      <list n="exportedReferences">
+         <hash>
+            <value n="id" v="Oracle JDBC"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" path="../../../../Users/damir/AppData/Roaming/JDeveloper/system12.1.2.0.40.66.68/o.jdeveloper/JSOUP.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+      </list>
+      <list n="libraryReferences">
+         <hash>
+            <value n="id" v="Oracle JDBC"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+         <hash>
+            <url n="id" path="../../../../Users/damir/AppData/Roaming/JDeveloper/system12.1.2.0.40.66.68/o.jdeveloper/JSOUP.library"/>
+            <value n="isJDK" v="false"/>
+         </hash>
+      </list>
+   </hash>
    <hash n="oracle.jdevimpl.config.JProjectPaths">
       <url n="outputDirectory" path="classes/"/>
    </hash>
