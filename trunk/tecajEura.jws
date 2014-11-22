@@ -25,12 +25,7 @@
       <hash><url n="URL" path="tecajEura/tecajEura.jpr"/></hash>
    </list>
    <hash n="oracle.jdeveloper.model.ApplicationLibraries">
-      <list n="libraryReferences">
-         <hash>
-            <url n="id" path="../../../Users/damir/AppData/Roaming/JDeveloper/system12.1.2.0.40.66.68/o.jdeveloper/JSOUP.library"/>
-            <value n="isJDK" v="false"/>
-         </hash>
-      </list>
+      <list n="libraryReferences"/>
    </hash>
    <hash n="oracle.jdeveloper.model.PathsConfiguration">
       <hash n="ApplicationSrcContentSet">

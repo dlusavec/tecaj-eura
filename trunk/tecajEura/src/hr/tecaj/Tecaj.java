@@ -1,30 +1,33 @@
 package hr.tecaj;
 
-public class Tecaj {  
-    private String mjesec;
-    private String dan;
+import java.math.BigDecimal;
+
+public class Tecaj {
+    private int mjesec;
+    private int dan;
     private String link;
-    private String kupovni;
-    private String srednji;
-    private String prodajni;
+    private BigDecimal kupovni;
+    private BigDecimal srednji;
+    private BigDecimal prodajni;
+
     public Tecaj() {
         super();
     }
 
 
-    public void setMjesec(String mjesec) {
+    public void setMjesec(int mjesec) {
         this.mjesec = mjesec;
     }
 
-    public String getMjesec() {
+    public int getMjesec() {
         return mjesec;
     }
 
-    public void setDan(String dan) {
+    public void setDan(int dan) {
         this.dan = dan;
     }
 
-    public String getDan() {
+    public int getDan() {
         return dan;
     }
 
@@ -36,27 +39,27 @@ public class Tecaj {
         return link;
     }
 
-    public void setKupovni(String kupovni) {
+    public void setKupovni(BigDecimal kupovni) {
         this.kupovni = kupovni;
     }
 
-    public String getKupovni() {
+    public BigDecimal getKupovni() {
         return kupovni;
     }
 
-    public void setSrednji(String srednji) {
+    public void setSrednji(BigDecimal srednji) {
         this.srednji = srednji;
     }
 
-    public String getSrednji() {
+    public BigDecimal getSrednji() {
         return srednji;
     }
 
-    public void setProdajni(String prodajni) {
+    public void setProdajni(BigDecimal prodajni) {
         this.prodajni = prodajni;
     }
 
-    public String getProdajni() {
+    public BigDecimal getProdajni() {
         return prodajni;
     }
 
