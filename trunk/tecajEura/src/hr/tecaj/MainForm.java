@@ -5,6 +5,12 @@ import java.io.IOException;
 
 import java.net.URL;
 
+import java.sql.Connection;
+
+import java.sql.PreparedStatement;
+
+import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -28,6 +34,7 @@ public class MainForm extends javax.swing.JFrame {
     private Pattern maska = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
     private String valuta;
     private String godina;
+    private int godinaBroj;
     private List<String> listaMjeseci = new ArrayList();
     private List<Tecaj> listaTecajeva = new ArrayList();
 
@@ -35,6 +42,7 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         setLocationRelativeTo(null);
+        Pomocna.spojiSeNaBazu();
     }
 
     /** This method is called from within the constructor to
@@ -163,15 +171,12 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        valuta = jftValuta.getText().trim();
-        godina = jtfGodina.getText().trim().substring(2);
-        Scanner scan = new Scanner(jtfMjeseci.getText().trim()).useDelimiter(",");
-        while (scan.hasNext()) {
-            listaMjeseci.add(scan.next());
-        }
+        priprema();
         povuciLinkoveTecajeva();
         izvuciTecajNaDan();
-      /*  for (Tecaj tecaj : listaTecajeva) {
+        spremiPodatkeUBazu();
+        Pomocna.porukaInfo(null, "Ažuriranje završeno");
+        /*  for (Tecaj tecaj : listaTecajeva) {
             Pomocna.ispis(tecaj);
         }*/
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -180,9 +185,21 @@ public class MainForm extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void priprema() {
+        listaMjeseci.clear();
+        listaTecajeva.clear();
+        valuta = jftValuta.getText().trim();
+        godina = jtfGodina.getText().trim().substring(2);
+        godinaBroj = Integer.parseInt(jtfGodina.getText().trim());
+        Scanner scan = new Scanner(jtfMjeseci.getText().trim()).useDelimiter(",");
+        while (scan.hasNext()) {
+            listaMjeseci.add(scan.next());
+        }
+    }
+
     private void povuciLinkoveTecajeva() {
         String puniLink;
-        
+
         for (String mjesec : listaMjeseci) {
 
             try {
@@ -190,10 +207,11 @@ public class MainForm extends javax.swing.JFrame {
                     Jsoup.connect("http://www.hnb.hr/tecajn/h" + mjesec + godina + ".htm").userAgent("Mozilla").get();
                 Elements linkovi = dokument.select("a[href]");
                 for (Element link : linkovi) {
-                    puniLink = linkPrefiks + link.attr("href").substring(2, link.attr("href").length());                   
+                    puniLink = linkPrefiks + link.attr("href").substring(2, link.attr("href").length());
                     Tecaj tecaj = new Tecaj();
                     tecaj.setMjesec(Integer.parseInt(mjesec));
-                    tecaj.setDan(Integer.parseInt(puniLink.substring(linkPrefiks.length() + 1, linkPrefiks.length() + 3)));
+                    tecaj.setDan(Integer.parseInt(puniLink.substring(linkPrefiks.length() + 1,
+                                                                     linkPrefiks.length() + 3)));
                     tecaj.setLink(puniLink);
                     listaTecajeva.add(tecaj);
                     //System.out.println(puniLink);
@@ -216,8 +234,8 @@ public class MainForm extends javax.swing.JFrame {
                     tecajnaLista = link.html();
                     tecajValute =
                         tecajnaLista.substring(tecajnaLista.indexOf(valuta),
-                                               tecajnaLista.indexOf("\n", tecajnaLista.indexOf(valuta)));              
-                    izvuciTecaj(tecaj, tecajValute);
+                                               tecajnaLista.indexOf("\n", tecajnaLista.indexOf(valuta)));
+                    izvuciTecajIzStringa(tecaj, tecajValute);
                 }
             } catch (IOException e) {
                 Pomocna.porukaError(this.getContentPane(), e.getMessage());
@@ -225,7 +243,7 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
 
-    private void izvuciTecaj(Tecaj tecaj, String tecajValute) {
+    private void izvuciTecajIzStringa(Tecaj tecaj, String tecajValute) {
         String tecajTmp;
         int pozicija = 1;
         Matcher m = maska.matcher(tecajValute);
@@ -240,6 +258,69 @@ public class MainForm extends javax.swing.JFrame {
                 tecaj.setProdajni(Pomocna.stringToBigDecimal(tecajTmp));
             }
             pozicija++;
+        }
+    }
+
+    private void spremiPodatkeUBazu() {
+        Connection konekcija = Pomocna.getKonekcija();
+        String insert =
+            "INSERT INTO TECAJ\n" +
+            "  (VALUTA,    GODINA,    MJESEC,    DAN,    DATUM,    KUPOVNI,    SREDNJI,    PRODAJNI  )\n" +
+            "  VALUES\n" + "  ( ?, ?, ?, ?, ?, ?, ?, ?)";
+        String delete = "DELETE FROM TECAJ WHERE VALUTA = ? AND GODINA= ? AND MJESEC= ?";
+        PreparedStatement stmt = null;
+
+        try {
+            stmt = konekcija.prepareStatement(delete);
+        } catch (SQLException e) {
+            Pomocna.porukaError(null, e.getMessage());
+            return;
+        }
+
+        // Brisanje podataka
+        for (String mjesec : listaMjeseci) {
+            try {
+                stmt.setString(1, valuta);
+                stmt.setInt(2, godinaBroj);
+                stmt.setInt(3, Integer.parseInt(mjesec));
+                stmt.execute();
+            } catch (SQLException e) {
+                Pomocna.porukaError(null, e.getMessage());
+                return;
+            }
+
+        }
+
+        // Insert podataka
+        try {
+            stmt = konekcija.prepareStatement(insert);
+        } catch (SQLException e) {
+            Pomocna.porukaError(null, e.getMessage());
+            return;
+        }
+
+        for (Tecaj tecaj : listaTecajeva) {
+
+            try {
+
+                stmt.setString(1, valuta);
+                stmt.setInt(2, godinaBroj);
+                stmt.setInt(3, tecaj.getMjesec());
+                stmt.setInt(4, tecaj.getDan());
+                stmt.setDate(5, Pomocna.brojUSQLDatum(godinaBroj, tecaj.getMjesec(), tecaj.getDan()));
+                stmt.setBigDecimal(6, tecaj.getKupovni());
+                stmt.setBigDecimal(7, tecaj.getSrednji());
+                stmt.setBigDecimal(8, tecaj.getProdajni());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                Pomocna.porukaError(null, e.getMessage());
+                return;
+            }
+        }
+        try {
+            konekcija.commit();
+        } catch (SQLException e) {
+            Pomocna.porukaError(null, e.getMessage());
         }
     }
 

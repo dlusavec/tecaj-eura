@@ -6,19 +6,39 @@ import java.lang.reflect.Field;
 
 import java.math.BigDecimal;
 
+import java.sql.Connection;
+
+import java.sql.DriverManager;
+
+import java.sql.SQLException;
+
 import java.text.DecimalFormat;
 
 import java.text.ParseException;
 
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JOptionPane;
 
 public class Pomocna {
     private static DecimalFormat decimalniBrojFormat =
-        (DecimalFormat) new DecimalFormat().getNumberInstance(new Locale("hr", "HR"));    
+        (DecimalFormat) new DecimalFormat().getNumberInstance(new Locale("hr", "HR"));
+    private static Connection konekcija;
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
     public Pomocna() {
         super();
+    }
+
+    public static void setKonekcija(Connection konekcija) {
+        Pomocna.konekcija = konekcija;
+    }
+
+    public static Connection getKonekcija() {
+        return konekcija;
     }
 
     public static void porukaInfo(Component c, String poruka) {
@@ -57,5 +77,31 @@ public class Pomocna {
             //Jebes gresku pisi 0
             return new BigDecimal(0);
         }
+
+    }
+
+    public static void spojiSeNaBazu() {
+        try {
+            konekcija = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl", "dbo", "mareinfo");
+        } catch (SQLException e) {
+            porukaError(null, e.getMessage());
+        }
+    }
+
+    public static java.util.Date stringUDatum(String datum) {
+        try {
+            return sdf.parse(datum);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static java.sql.Date datumUSQLDatum(Date datum) {
+        return new java.sql.Date(datum.getTime());
+    }
+
+    public static java.sql.Date brojUSQLDatum(int godina, int mjesec, int dan) {
+        return datumUSQLDatum(stringUDatum(Integer.toString(godina * 10000 + mjesec * 100 + dan)));
+
     }
 }
