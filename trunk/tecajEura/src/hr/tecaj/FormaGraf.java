@@ -1,13 +1,13 @@
 
 package hr.tecaj;
 
-import java.awt.Color;
+import java.awt.BasicStroke;
 
-import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
-import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
@@ -29,6 +29,7 @@ public class FormaGraf extends javax.swing.JFrame {
     /** Creates new form Graf */
     public FormaGraf() {
         initComponents();
+        inicijalizacija();
         kreirajGraf();
         setLocationRelativeTo(null);
     }
@@ -41,122 +42,173 @@ public class FormaGraf extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     private void initComponents() {//GEN-BEGIN:initComponents
 
-        jPanel1 = new javax.swing.JPanel();
+        panelZaGraf = new javax.swing.JPanel();
+        jcbValute = new javax.swing.JComboBox();
+        jcbGraf = new javax.swing.JComboBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Graf");
+
+        panelZaGraf.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelZaGraf.setLayout(new javax.swing.BoxLayout(panelZaGraf, javax.swing.BoxLayout.LINE_AXIS));
+
+        jcbValute.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jcbValute.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbValuteActionPerformed(evt);
+            }
+        });
+
+        jcbGraf.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jcbGraf.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1 Teèaj kroz godine", "2 Teèaj unutar godina po mjesecima" }));
+        jcbGraf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbGrafActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 700, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(jcbValute, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jcbGraf, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(613, Short.MAX_VALUE))
+            .addComponent(panelZaGraf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 50, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jcbGraf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcbValute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelZaGraf, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE))
         );
 
         pack();
     }//GEN-END:initComponents
 
+    private void jcbGrafActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbGrafActionPerformed
+        kreirajGraf();       
+    }//GEN-LAST:event_jcbGrafActionPerformed
+
+    private void jcbValuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbValuteActionPerformed
+        // TODO add your handling code here:
+        kreirajGraf();
+    }//GEN-LAST:event_jcbValuteActionPerformed
+
+    private void inicijalizacija() {
+        Pomocna.instalirajValuteuCombo(jcbValute);
+    }
+
+
     private void kreirajGraf() {
-        final NumberAxis rangeAxis = new NumberAxis("Y-Axis");
-        rangeAxis.setRange(7,8);
-        rangeAxis.setTickUnit(new NumberTickUnit(0.05));
-       // rangeAxis.setTickUnit(new NumberTickUnit(0.05));
-       final XYSeries god2008 = new XYSeries("2008");
-        god2008.add(1, 7.228114);
-        god2008.add(4, 7.231443);
-        god2008.add(7, 7.193783);
-        god2008.add(10, 7.085424);
-        god2008.add(12, 7.098951);
-        
-        final XYSeries god2010 = new XYSeries("2010");
-         god2010.add(1, 7.252208);
-         god2010.add(4, 7.225134);
-         god2010.add(7, 7.163396);
-         god2010.add(10, 7.269164);
-         god2010.add(12, 7.353646);
-        
-        final XYSeries god2013 = new XYSeries("2013");
-        god2013.add(1, 7.523954);
-        god2013.add(4, 7.563114);
-        god2013.add(7, 7.421461);
-        god2013.add(10, 7.579953);
-        god2013.add(12, 7.603049);
-        
-       // DefaultCategoryDataset podaci = new DefaultCategoryDataset();
-       final XYSeriesCollection podaci = new XYSeriesCollection();
-        /*podaci.addValue(7.085424, "Teèaj", "2008");
-        podaci.addValue(7.19718, "Teèaj", "2009");
-        podaci.addValue(7.163396, "Teèaj", "2010");
-        podaci.addValue(7.324715, "Teèaj", "2011");
-        podaci.addValue(7.368511, "Teèaj", "2012");
-        podaci.addValue(7.421461, "Teèaj", "2013");
-        podaci.addValue(7.540866, "Teèaj", "2014");*/
-        podaci.addSeries(god2008);
-        podaci.addSeries(god2010);
-        podaci.addSeries(god2013);
-        graf =
-            ChartFactory.createXYLineChart("Teèaj kroz godine", "Godina", "Teèaj", podaci,
-                                         PlotOrientation.VERTICAL, true, true, false);
-
-        /* Step -3 : Write line chart to a file */
-        int width = 640; /* Width of the image */
-        int height = 480; /* Height of the image */
-        /* File lineChart=new File("line_Chart_example.png");
-                         ChartUtilities.saveChartAsPNG(lineChart,lineChartObject,width,height); */
-        //graf.getCategoryPlot().setBackgroundPaint(Color.blue);
-       // CategoryPlot xyPlot = (CategoryPlot) graf.getPlot();
-       XYPlot xyPlot = (XYPlot) graf.getPlot();
-        xyPlot.setRangeAxis(rangeAxis);
-               // xyPlot.setDomainCrosshairVisible(true);
-                //xyPlot.setRangeCrosshairVisible(true);
-        panel = new ChartPanel(graf);
-        panel.setSize(400, 300);
-        jPanel1.add(panel);
-        //setContentPane(panel);
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+        /*
+         * 1 Teèaj kroz godine, 2 Teèaj unutar godina po mjesecima
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+        String valuta = jcbValute.getSelectedItem().toString().trim();
+        String tipGrafa = jcbGraf.getSelectedItem().toString().substring(0, 1);
+        NumberAxis yOs = getYOs(valuta);
+        DefaultCategoryDataset podaci = null;
+        XYSeriesCollection podaciXYLista = null;
+        CategoryPlot plot = null;
+        XYPlot xyPlot = null;
+        ResultSet rs = null;
+        if (tipGrafa.equals("1")) {
+            podaci = new DefaultCategoryDataset();
+            rs = Pomocna.tecajValuteKrozGodine(valuta);
+            try {
+                while (rs.next()) {
+                    podaci.addValue(rs.getDouble("min_tecaj"), "Teèaj", Integer.toString(rs.getInt("godina")));
                 }
+                rs.close();
+            } catch (SQLException e) {
+                Pomocna.porukaError(null, e.getMessage());
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormaGraf.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormaGraf.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormaGraf.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormaGraf.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FormaGraf().setVisible(true);
+            graf =
+                ChartFactory.createLineChart3D("Teèaj " + valuta + " kroz godine", "Godina", "Teèaj", podaci,
+                                               PlotOrientation.VERTICAL, true, true, false);
+          
+            plot = (CategoryPlot) graf.getPlot();
+
+            plot.setRangeAxis(yOs);
+        }
+
+        else if (tipGrafa.equals("2")) {
+            XYSeries podaciXY = null;
+            podaciXYLista = new XYSeriesCollection();
+            int godina = 0;
+            rs = Pomocna.tecajValuteKrozGodineIMjesece(valuta);
+
+            try {
+                while (rs.next()) {
+                    if (godina == 0) {
+                        godina = rs.getInt("godina");
+                        podaciXY = new XYSeries(Integer.toString(godina));
+                    }
+                    if (godina != rs.getInt("godina")) {
+                        podaciXYLista.addSeries(podaciXY);
+                        godina = rs.getInt("godina");
+                        podaciXY = new XYSeries(Integer.toString(godina));
+                    }
+                    podaciXY.add(rs.getDouble("mjesec"), rs.getDouble("tecaj"));
+                }
+                rs.close();
+                podaciXYLista.addSeries(podaciXY);
+            } catch (SQLException e) {
+                Pomocna.porukaError(null, e.getMessage());
             }
-        });
+            graf =
+                ChartFactory.createXYLineChart("Teèaj unutar godina po mjesecima", "Mjesec", "Teèaj", podaciXYLista,
+                                               PlotOrientation.VERTICAL, true, true, false);
+            xyPlot = (XYPlot) graf.getPlot();
+            xyPlot.setRangeAxis(yOs);
+            xyPlot.setDomainCrosshairVisible(true);
+            xyPlot.setRangeCrosshairVisible(true);
+
+            //X OS postavke
+            NumberAxis xOs = new NumberAxis("X-Axis");
+            xOs.setRange(1, 12);
+            xOs.setTickUnit(new NumberTickUnit(1));
+            xOs.setLabel("Mjesec");
+            xyPlot.setDomainAxis(xOs);
+
+            // Debljina linije
+            int brojSerija = xyPlot.getSeriesCount();
+            for (int i = 0; i < brojSerija; i++) {
+                xyPlot.getRenderer().setSeriesStroke(i, new BasicStroke(2f));
+            }
+
+            panel = new ChartPanel(graf);
+            panelZaGraf.add(panel);
+
+        }
+
+        panel = new ChartPanel(graf);
+        panelZaGraf.removeAll();
+        panelZaGraf.add(panel);
+        panelZaGraf.validate();
+        panelZaGraf.repaint();
     }
 
+    private NumberAxis getYOs(String valuta) {
+        NumberAxis yOs = new NumberAxis("Y-Axis");
+        TecajMinMax tecajMinMax = Pomocna.getMinMaxTecajValute(valuta);
+        yOs.setRange(tecajMinMax.getMin(), tecajMinMax.getMax());
+        yOs.setTickUnit(new NumberTickUnit(0.10));
+        yOs.setLabel("Teèaj");
+        return yOs;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JComboBox jcbGraf;
+    private javax.swing.JComboBox jcbValute;
+    private javax.swing.JPanel panelZaGraf;
     // End of variables declaration//GEN-END:variables
 
 }

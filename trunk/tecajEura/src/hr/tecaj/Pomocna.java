@@ -5,26 +5,22 @@ import java.awt.Component;
 import java.lang.reflect.Field;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import java.sql.Connection;
-
 import java.sql.DriverManager;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import java.sql.Statement;
-
 import java.text.DecimalFormat;
-
 import java.text.ParseException;
-
 import java.text.SimpleDateFormat;
 
 import java.util.Date;
 import java.util.Locale;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 public class Pomocna {
@@ -109,37 +105,86 @@ public class Pomocna {
 
     }
 
-    public static void tecajValuteKrozGodine(String valuta) {
-        String upitSQL = "select godina,min(kupovni) min_tecaj from tecaj where valuta=? group by godina order by 1";
-        PreparedStatement upit;
-        ResultSet rs;
+    /**
+     * @param valuta
+     * @return godina, min_tecaj
+     * */
+    @SuppressWarnings("oracle.jdeveloper.java.semantic-warning")
+    public static ResultSet tecajValuteKrozGodine(String valuta) {
+        String upitSQL =
+            "select godina,min(kupovni) min_tecaj from tecaj where valuta= ? group by godina order by godina";
+        PreparedStatement upit = null;
+        ResultSet rs = null;
         try {
             upit = konekcija.prepareStatement(upitSQL);
             upit.setString(1, valuta.trim());
-            rs = upit.executeQuery(upitSQL);
-            while (rs.next()) {
-                System.out.println(rs.getInt("godina"));
-                System.out.println(rs.getBigDecimal("min_tecaj"));
-            }
-            rs.close();
-            upit.close();
+            rs = upit.executeQuery();
         } catch (SQLException e) {
             porukaError(null, e.getMessage());
+        } finally {
+            return rs;
         }
     }
 
-    public static void getMinMaxTecajValute(String valuta) {
+    /**
+     *
+     * @param valuta
+     * @return godina, mjesec, tecaj
+     */
+    @SuppressWarnings("oracle.jdeveloper.java.semantic-warning")
+    public static ResultSet tecajValuteKrozGodineIMjesece(String valuta) {
+        String upitSQL =
+            "select godina,mjesec,min(kupovni) tecaj from tecaj where valuta= ? group by godina,mjesec order by godina,mjesec";
+        PreparedStatement upit = null;
+        ResultSet rs = null;
+        try {
+            upit = konekcija.prepareStatement(upitSQL);
+            upit.setString(1, valuta.trim());
+            rs = upit.executeQuery();
+        } catch (SQLException e) {
+            porukaError(null, e.getMessage());
+        } finally {
+            return rs;
+        }
+    }
+
+    /**
+     * @return TecajMinMax klasu
+     * */
+    @SuppressWarnings("oracle.jdeveloper.java.semantic-warning")
+    public static TecajMinMax getMinMaxTecajValute(String valuta) {
         String upitSQL = "select MIN(kupovni) minimalni,MAX(kupovni) maksimalni from tecaj where valuta=?";
-        PreparedStatement upit;
-        ResultSet rs;
+        PreparedStatement upit = null;
+        ResultSet rs = null;
+        TecajMinMax tecajMinMax = new TecajMinMax();
         try {
             upit = konekcija.prepareStatement(upitSQL);
             upit.setString(1, valuta.trim());
             rs = upit.executeQuery();
             while (rs.next()) {
-                System.out.println(rs.getBigDecimal("minimalni"));
-                System.out.println(rs.getBigDecimal("maksimalni"));
+                tecajMinMax.setMin(rs.getBigDecimal("minimalni").setScale(0, RoundingMode.FLOOR).doubleValue());
+                tecajMinMax.setMax(rs.getBigDecimal("maksimalni").setScale(0, RoundingMode.CEILING).doubleValue());
             }
+
+        } catch (SQLException e) {
+            porukaError(null, e.getMessage());
+        } finally {
+            return tecajMinMax;
+        }
+    }
+
+    public static void instalirajValuteuCombo(JComboBox comboBox) {
+        String upitSQL = "select distinct valuta from tecaj order by valuta";
+        PreparedStatement upit = null;
+        ResultSet rs = null;
+
+        try {
+            upit = konekcija.prepareStatement(upitSQL);
+            rs = upit.executeQuery();
+            while (rs.next()) {
+                comboBox.addItem(rs.getObject(1));
+            }
+            comboBox.setSelectedItem("EUR");
             rs.close();
             upit.close();
         } catch (SQLException e) {
