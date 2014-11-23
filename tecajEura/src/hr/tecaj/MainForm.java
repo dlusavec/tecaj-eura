@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import java.sql.Connection;
-
 import java.sql.PreparedStatement;
-
 import java.sql.SQLException;
 
 import java.util.ArrayList;
@@ -63,6 +61,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("HNB teèaj eura");
@@ -102,7 +101,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         jftValuta.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jftValuta.setText("EMU");
+        jftValuta.setText("EUR");
         jftValuta.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jftValutaFocusGained(evt);
@@ -164,6 +163,13 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setText("Graf");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -175,6 +181,8 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addGap(18, 18, 18)
                         .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -189,7 +197,8 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -230,6 +239,11 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         jtfMjeseci.selectAll();
     }//GEN-LAST:event_jtfMjeseciFocusGained
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        new FormaGraf().setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void priprema() {
         listaMjeseci.clear();
@@ -411,6 +425,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

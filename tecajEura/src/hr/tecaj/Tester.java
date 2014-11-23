@@ -1,7 +1,5 @@
 package hr.tecaj;
 
-import java.util.Date;
-import java.util.Locale;
 
 public class Tester {
     public Tester() {
@@ -10,5 +8,6 @@ public class Tester {
 
     public static void main(String[] args) {
         Tester tester = new Tester();      
+      
     }
 }
