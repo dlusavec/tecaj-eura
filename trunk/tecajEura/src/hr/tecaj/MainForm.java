@@ -62,6 +62,7 @@ public class MainForm extends javax.swing.JFrame {
         jftValuta = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("HNB teèaj eura");
@@ -78,6 +79,11 @@ public class MainForm extends javax.swing.JFrame {
 
         jtfMjeseci.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfMjeseci.setText("01,02,03,04,05,06,07,08,09,10,11,12");
+        jtfMjeseci.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfMjeseciFocusGained(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(50, 105, 195));
@@ -89,9 +95,19 @@ public class MainForm extends javax.swing.JFrame {
 
         jtfGodina.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jtfGodina.setText("2008");
+        jtfGodina.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtfGodinaFocusGained(evt);
+            }
+        });
 
         jftValuta.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jftValuta.setText("EMU");
+        jftValuta.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jftValutaFocusGained(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(50, 105, 195));
@@ -109,10 +125,10 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jtfGodina)
-                        .addComponent(jftValuta, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jtfMjeseci, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtfMjeseci, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jftValuta, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jtfGodina, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)))
                 .addContainerGap(435, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -141,6 +157,13 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Upit");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,6 +173,8 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -163,7 +188,8 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -184,6 +210,26 @@ public class MainForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        Pomocna.getMinMaxTecajValute("EMU");
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jftValutaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jftValutaFocusGained
+        // TODO add your handling code here:
+        jftValuta.selectAll();
+    }//GEN-LAST:event_jftValutaFocusGained
+
+    private void jtfGodinaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfGodinaFocusGained
+        // TODO add your handling code here:
+        jtfGodina.selectAll();
+    }//GEN-LAST:event_jtfGodinaFocusGained
+
+    private void jtfMjeseciFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtfMjeseciFocusGained
+        // TODO add your handling code here:
+        jtfMjeseci.selectAll();
+    }//GEN-LAST:event_jtfMjeseciFocusGained
 
     private void priprema() {
         listaMjeseci.clear();
@@ -267,7 +313,9 @@ public class MainForm extends javax.swing.JFrame {
             "INSERT INTO TECAJ\n" +
             "  (VALUTA,    GODINA,    MJESEC,    DAN,    DATUM,    KUPOVNI,    SREDNJI,    PRODAJNI  )\n" +
             "  VALUES\n" + "  ( ?, ?, ?, ?, ?, ?, ?, ?)";
+
         String delete = "DELETE FROM TECAJ WHERE VALUTA = ? AND GODINA= ? AND MJESEC= ?";
+
         PreparedStatement stmt = null;
 
         try {
@@ -362,6 +410,7 @@ public class MainForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

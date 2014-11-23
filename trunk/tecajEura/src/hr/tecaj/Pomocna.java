@@ -10,7 +10,11 @@ import java.sql.Connection;
 
 import java.sql.DriverManager;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import java.sql.Statement;
 
 import java.text.DecimalFormat;
 
@@ -103,5 +107,43 @@ public class Pomocna {
     public static java.sql.Date brojUSQLDatum(int godina, int mjesec, int dan) {
         return datumUSQLDatum(stringUDatum(Integer.toString(godina * 10000 + mjesec * 100 + dan)));
 
+    }
+
+    public static void tecajValuteKrozGodine(String valuta) {
+        String upitSQL = "select godina,min(kupovni) min_tecaj from tecaj where valuta=? group by godina order by 1";
+        PreparedStatement upit;
+        ResultSet rs;
+        try {
+            upit = konekcija.prepareStatement(upitSQL);
+            upit.setString(1, valuta.trim());
+            rs = upit.executeQuery(upitSQL);
+            while (rs.next()) {
+                System.out.println(rs.getInt("godina"));
+                System.out.println(rs.getBigDecimal("min_tecaj"));
+            }
+            rs.close();
+            upit.close();
+        } catch (SQLException e) {
+            porukaError(null, e.getMessage());
+        }
+    }
+
+    public static void getMinMaxTecajValute(String valuta) {
+        String upitSQL = "select MIN(kupovni) minimalni,MAX(kupovni) maksimalni from tecaj where valuta=?";
+        PreparedStatement upit;
+        ResultSet rs;
+        try {
+            upit = konekcija.prepareStatement(upitSQL);
+            upit.setString(1, valuta.trim());
+            rs = upit.executeQuery();
+            while (rs.next()) {
+                System.out.println(rs.getBigDecimal("minimalni"));
+                System.out.println(rs.getBigDecimal("maksimalni"));
+            }
+            rs.close();
+            upit.close();
+        } catch (SQLException e) {
+            porukaError(null, e.getMessage());
+        }
     }
 }
